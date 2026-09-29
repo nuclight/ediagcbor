@@ -1,0 +1,22 @@
+; Sample EDN from draft-ietf-cbor-edn-literals-23 (raw strings)
+
+; Simple raw string (equal delimiters)
+``[^ \t\n\r"'`]``
+
+; Inner double-backticks need triple delimiters
+```To emulate typographic quotes, sometimes duplicate backward and
+forward single quotes are used, as in ``text.''
+```
+
+; Leading backquote via swallowed newline after open
+```a```
+
+; Excess closing backticks become content (§2.5.3)
+```a = ``foo`````
+
+; Prefixed raw hex / base64
+h`48656c6c6f20776f726c64`
+b64`EjRWeA`
+
+; JSON-like values still work
+[true, false, null, undefined, 0x1267, 1.5, Infinity, NaN]

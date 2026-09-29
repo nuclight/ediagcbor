@@ -1,0 +1,20 @@
+# Build
+/ediagcbor
+/edn2cbor
+*.o
+compat/*.o
+/parser.tab.c
+/parser.tab.h
+/lex.yy.c
+/.edn-tally
+
+# Editor / local
+*~
+*.swp
+.DS_Store
+/Untitled
+/.draft.*
+/err.txt
+/idx.py
+/test.cedn*
+/tmp/

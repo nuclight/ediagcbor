@@ -1,0 +1,22 @@
+x,NaN,f97e00
+x,float'7ef0',f97ef0
+x,float'4711/cologne/0815//ww1',fa47110815
+x,"float<<h'a /*f
+oo*/b # more
+ccddee '>>",faabccddee
+x,"float'aabb /*f
+oo*/ # more
+ccdd # runt '",faaabbccdd
+x,"same<<-3.336002535412469e-13,float'aa/oops*/bb /*f
+o*p/o*/// more
+ccdd # runt '>>",faaabbccdd
+x,b64'AA',4100
+-,b64'AA=',4100
+x,b64'AA==',4100
+-,b64'AB',4100
+-,b64'AB=',4100
+-,b64'AB==',4100
+x,same<<b64'AA'>>,4100
+x,h'00',4100
+x,"same<<b64'AA', b64'AA'>>",4100
+x,"same<<b64'AA',h'00'>>",4100

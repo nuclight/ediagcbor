@@ -1,0 +1,114 @@
+.\" SPDX-License-Identifier: BSD-2-Clause
+.Dd September 28, 2026
+.Dt EDIAGCBOR 1
+.Os
+.Sh NAME
+.Nm ediagcbor
+.Nd emergency diagnostic converter between CBOR and EDN
+.Sh SYNOPSIS
+.Nm
+.Op Fl e | Fl d
+.Op Fl i Ar input
+.Op Fl o Ar output
+.Op Ar file
+.Op options
+.Sh DESCRIPTION
+.Bf -emphasis
+Warning: This is an AI-generated version and is expected to be reviewed
+and massively refactored.
+It is not intended for inclusion in a base system yet.
+You will know it is ready when this manual page is complete.
+.Ef
+.Pp
+.Nm
+converts between binary Concise Binary Object Representation
+.Pq CBOR, RFC 8949
+and CBOR Extended Diagnostic Notation
+.Pq EDN .
+It targets emergency / single-user recovery situations
+— for example when file systems with packages are unavailable and only a
+read-only root file system remains.
+In all other cases, prefer fuller EDN implementations written in
+higher-level languages.
+.Pp
+.Bl -tag -width indent
+.It Fl e , Fl -encode
+Read EDN, write CBOR.
+.It Fl d , Fl -decode
+Read CBOR, write pretty-printed EDN, recovering known literals where possible
+.Pq e.g. tag 52/54 as Ic IP'...' , tag 1 as Ic DT'...' .
+ASCII-printable byte strings are written as
+.Ic '...'
+instead of
+.Ic h'' .
+.It Fl i Ar path
+Input file (binary for decode, text for encode).
+.It Fl o Ar path
+Output file (default: standard output).
+.El
+.Pp
+If neither
+.Fl e
+nor
+.Fl d
+is given, the mode is guessed from the input path:
+names ending in
+.Dq cbor
+select decode; names ending in
+.Dq dn
+.Pq e.g. Ic .edn , Ic .cedn
+select encode.
+Otherwise
+.Pq stdin or unrecognized suffix
+encode is the default.
+.Ss Brief CBOR primer
+CBOR
+.Pq RFC 8949
+is a binary data format with major types: unsigned/negative integers,
+byte strings, text strings, arrays, maps, tags, and simple values / floats.
+Tags attach semantics to a nested item (epoch time is tag 1; IPv4/IPv6
+addresses and prefixes use tags 52 and 54 per RFC 9164).
+.Ss Brief EDN primer
+EDN is a human-readable notation for CBOR items
+.Pq draft-ietf-cbor-edn-literals .
+Examples:
+.Bd -literal -offset indent
+true, 42, "text", h'a1b2', [1, 2], {"a": 1}
+1(1690000000)          # tag
+DT'2023-07-22T00:26:40Z'
+IP'192.0.2.1'
+IP'2001:db8::/32'
+.Ed
+.Pp
+Application-extension literals
+.Pq Ic dt'' , Ic IP'' , Ic h'' , ...
+decode to ordinary CBOR; on
+.Fl d ,
+.Nm
+tries to print the convenient form again.
+.Ss Ingest options
+Default EDN parsing follows the CBOR WG chairs' post-27 removals.
+Legacy draft \-27 behaviour is restored with:
+.Fl -ellipsis ,
+.Fl -tag999 ,
+.Fl -c-comments ,
+.Fl -eol-slash-comments ,
+.Fl -legacy-numbers ,
+.Fl -indicator-suffix ,
+.Fl -raw-delim-max Ns = Ns Ar N .
+.Sh EXIT STATUS
+.Ex -std
+.Sh EXAMPLES
+.Bd -literal -offset indent
+ediagcbor -e -i msg.edn -o msg.cbor
+ediagcbor -d dump.cbor
+ediagcbor packet.cbor          # guesses -d
+ediagcbor note.edn             # guesses -e
+.Ed
+.Sh SEE ALSO
+RFC 8949, RFC 9164,
+.Lk https://datatracker.ietf.org/doc/draft-ietf-cbor-edn-literals/
+.Sh AUTHORS
+.An -nosplit
+.An Vadim Goncharov Aq Mt vadimnuclight@gmail.com
+.Pq Lk https://github.com/nuclight
