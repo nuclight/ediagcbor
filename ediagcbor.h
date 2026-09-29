@@ -32,6 +32,19 @@
 #include <cbor.h>
 
 /*
+ * FreeBSD <sys/cdefs.h> provides __printflike; Linux/macOS typically do not.
+ * Map to GCC/Clang format attribute so diagnose.c stays portable.
+ */
+#ifndef __printflike
+#if defined(__GNUC__) || defined(__clang__)
+#define	__printflike(fmtarg, firstvararg) \
+	__attribute__((__format__(__printf__, (fmtarg), (firstvararg))))
+#else
+#define	__printflike(fmtarg, firstvararg)
+#endif
+#endif
+
+/*
  * Hard ceiling on raw-string delimiter width (lexer state budget).  The
  * chairs' post-27 default is 8 (issue "Limiting backtick delimiters to
  * maximum of 8"); --raw-delim-max may raise it up to this ceiling.
